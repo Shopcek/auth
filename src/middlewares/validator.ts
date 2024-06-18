@@ -7,7 +7,6 @@ import { validate } from "../helpers/validate";
 import validators from "../validators";
 
 export default (config, { strapi }: { strapi: Strapi }) => {
-  // Add your own logic here.
   return async (ctx, next) => {
     const validator = validators[ctx.originalUrl];
 

@@ -19,7 +19,8 @@
     },
     "secretKey": {
       "type": "string",
-      "required": true
+      "required": true,
+      "default": "high-secure-secret-key"
     }
   }
 }

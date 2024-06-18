@@ -375,7 +375,9 @@ export interface ApiServiceService extends Schema.CollectionType {
   };
   attributes: {
     key: Attribute.String & Attribute.Required & Attribute.Unique;
-    secretKey: Attribute.String & Attribute.Required;
+    secretKey: Attribute.String &
+      Attribute.Required &
+      Attribute.DefaultTo<'high-secure-secret-key'>;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

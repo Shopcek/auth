@@ -1,0 +1,20 @@
+{
+  "kind": "collectionType",
+  "collectionName": "wallets",
+  "info": {
+    "singularName": "wallet",
+    "pluralName": "wallets",
+    "displayName": "Wallet"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "address": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

@@ -376,7 +376,6 @@ export interface ApiServiceService extends Schema.CollectionType {
   attributes: {
     key: Attribute.String & Attribute.Required & Attribute.Unique;
     secretKey: Attribute.String & Attribute.Required;
-    accessToken: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -387,6 +386,35 @@ export interface ApiServiceService extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::service.service',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiWalletWallet extends Schema.CollectionType {
+  collectionName: 'wallets';
+  info: {
+    singularName: 'wallet';
+    pluralName: 'wallets';
+    displayName: 'Wallet';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    address: Attribute.String & Attribute.Required & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wallet.wallet',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wallet.wallet',
       'oneToOne',
       'admin::user'
     > &
@@ -831,6 +859,7 @@ declare module '@strapi/types' {
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::service.service': ApiServiceService;
+      'api::wallet.wallet': ApiWalletWallet;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

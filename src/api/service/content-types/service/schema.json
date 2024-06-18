@@ -20,9 +20,6 @@
     "secretKey": {
       "type": "string",
       "required": true
-    },
-    "accessToken": {
-      "type": "string"
     }
   }
 }

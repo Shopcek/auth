@@ -20,9 +20,6 @@ export default async (ctx, next) => {
     ctx.throw("Invalid credentials!", 403);
     return;
   }
-  const jwt = JWT.sign({ address: address }, serviceData.secretKey, {
-    expiresIn: 360,
-  });
 
   const wallet = await strapi.db.query("api::wallet.wallet").findOne({
     where: {
@@ -36,6 +33,8 @@ export default async (ctx, next) => {
   }
 
   ctx.body = {
-    jwt,
+    jwt: JWT.sign({ address: address }, serviceData.secretKey, {
+      expiresIn: 360,
+    }),
   };
 };

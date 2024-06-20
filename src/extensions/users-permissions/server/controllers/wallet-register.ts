@@ -19,12 +19,21 @@ export default async (ctx, next) => {
     ctx.throw("Invalid credentials!", 403);
   }
 
-  await strapi.entityService.create("api::wallet.wallet", {
-    data: {
-      address,
-      role: 1,
-    },
-  });
+  try {
+    await strapi.entityService.create("api::wallet.wallet", {
+      data: {
+        address,
+        role: 1,
+      },
+    });
+  } catch (error: any) {
+    ctx.throw(
+      error.message == "This attribute must be unique"
+        ? `${address} is already registered.`
+        : error.message,
+      400
+    );
+  }
 
   const jwt = JWT.sign({ address: address }, serviceData.secretKey, {
     expiresIn: 5 * 60,

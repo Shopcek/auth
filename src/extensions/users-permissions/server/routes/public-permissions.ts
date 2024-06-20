@@ -1,8 +1,8 @@
 export default [
   {
     method: "GET",
-    path: "/auth/wallet-info",
-    handler: "auth.wallet-info",
+    path: "/auth/public-permissions",
+    handler: "auth.public-permissions",
     config: {
       middlewares: ["plugin::users-permissions.rateLimit"],
       prefix: "",

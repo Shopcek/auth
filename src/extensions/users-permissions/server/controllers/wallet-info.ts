@@ -16,18 +16,12 @@ export default async (ctx: Context) => {
       role: "*",
     },
   });
-  const [permissions, publicPermissions] = await Promise.all([
-    getService("permission")
-      .findRolePermissions(wallet.role.id)
-      .then(map(getService("permission").toContentAPIPermission)),
-    getService("permission")
-      .findPublicPermissions()
-      .then(map(getService("permission").toContentAPIPermission)),
-  ]);
+  const permissions = await getService("permission")
+    .findRolePermissions(wallet.role.id)
+    .then(map(getService("permission").toContentAPIPermission));
 
   return {
-    ...wallet,
+    user: wallet,
     permissions,
-    publicPermissions,
   };
 };

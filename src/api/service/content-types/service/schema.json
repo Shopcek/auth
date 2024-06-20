@@ -21,6 +21,12 @@
       "type": "string",
       "required": true,
       "default": "high-secure-secret-key"
+    },
+    "permissions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::wallet.wallet-permission",
+      "mappedBy": "service"
     }
   }
 }

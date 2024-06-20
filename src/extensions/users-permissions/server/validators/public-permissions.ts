@@ -4,7 +4,6 @@ export default {
   input: null,
   output: null,
   query: Joi.object({
-    address: Joi.string().required(),
     service: Joi.string().required(),
   }),
 };

@@ -1,7 +1,7 @@
 import { Context } from "koa";
 
 export default async (ctx: Context) => {
-  const { address } = ctx.request.query;
+  const { address, service } = ctx.request.query;
 
   const wallet = await strapi.db.query("api::wallet.wallet").findOne({
     where: {
@@ -22,13 +22,18 @@ export default async (ctx: Context) => {
     return;
   }
 
-  const permissions = await strapi.db
-    .query("api::wallet.wallet-permission")
-    .findMany({
-      where: {
+  const permissions = await strapi.entityService.findMany(
+    "api::wallet.wallet-permission",
+    {
+      filters: {
         role: wallet.role.id,
+        service: {
+          key: service,
+        },
       },
-    });
+    }
+  );
+  console.log(permissions);
 
   return {
     user: wallet,

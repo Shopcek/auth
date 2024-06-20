@@ -378,6 +378,11 @@ export interface ApiServiceService extends Schema.CollectionType {
     secretKey: Attribute.String &
       Attribute.Required &
       Attribute.DefaultTo<'high-secure-secret-key'>;
+    permissions: Attribute.Relation<
+      'api::service.service',
+      'oneToMany',
+      'api::wallet.wallet-permission'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -446,6 +451,11 @@ export interface ApiWalletWalletPermission extends Schema.CollectionType {
       'api::wallet.wallet-permission',
       'oneToOne',
       'plugin::users-permissions.role'
+    >;
+    service: Attribute.Relation<
+      'api::wallet.wallet-permission',
+      'manyToOne',
+      'api::service.service'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;

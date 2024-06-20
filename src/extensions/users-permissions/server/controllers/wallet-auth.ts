@@ -9,6 +9,7 @@ export default async (ctx, next) => {
 
   if (!serviceData) {
     ctx.throw("Service not found!", 404);
+    return;
   }
 
   const { success, address } = await strapi
@@ -17,10 +18,23 @@ export default async (ctx, next) => {
 
   if (!success) {
     ctx.throw("Invalid credentials!", 403);
+    return;
   }
   const jwt = JWT.sign({ address: address }, serviceData.secretKey, {
     expiresIn: 360,
   });
+
+  const wallet = await strapi.db.query("api::wallet.wallet").findOne({
+    where: {
+      address,
+    },
+  });
+
+  if (!wallet) {
+    ctx.throw("User not found! Please register first.", 400);
+    return;
+  }
+
   ctx.body = {
     jwt,
   };

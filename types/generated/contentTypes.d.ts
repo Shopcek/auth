@@ -429,6 +429,41 @@ export interface ApiWalletWallet extends Schema.CollectionType {
   };
 }
 
+export interface ApiWalletWalletPermission extends Schema.CollectionType {
+  collectionName: 'wallet_permissions';
+  info: {
+    singularName: 'wallet-permission';
+    pluralName: 'wallet-permissions';
+    displayName: 'Wallet Permission';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    action: Attribute.String & Attribute.Required;
+    role: Attribute.Relation<
+      'api::wallet.wallet-permission',
+      'oneToOne',
+      'plugin::users-permissions.role'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::wallet.wallet-permission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::wallet.wallet-permission',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface PluginUploadFile extends Schema.CollectionType {
   collectionName: 'files';
   info: {
@@ -714,6 +749,14 @@ export interface PluginUsersPermissionsPermission
     pluralName: 'permissions';
     displayName: 'Permission';
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
   attributes: {
     action: Attribute.String & Attribute.Required;
     role: Attribute.Relation<
@@ -799,6 +842,14 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   options: {
     draftAndPublish: false;
   };
+  pluginOptions: {
+    'content-manager': {
+      visible: false;
+    };
+    'content-type-builder': {
+      visible: false;
+    };
+  };
   attributes: {
     username: Attribute.String &
       Attribute.Required &
@@ -856,6 +907,7 @@ declare module '@strapi/types' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'api::service.service': ApiServiceService;
       'api::wallet.wallet': ApiWalletWallet;
+      'api::wallet.wallet-permission': ApiWalletWalletPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

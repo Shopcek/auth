@@ -22,6 +22,7 @@ export default async (ctx, next) => {
   await strapi.entityService.create("api::wallet.wallet", {
     data: {
       address,
+      role: 1,
     },
   });
 

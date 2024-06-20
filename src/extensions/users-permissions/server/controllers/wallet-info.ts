@@ -1,9 +1,4 @@
 import { Context } from "koa";
-import { map } from "lodash/fp";
-
-const getService = (name) => {
-  return strapi.plugin("users-permissions").service(name);
-};
 
 export default async (ctx: Context) => {
   const { address } = ctx.request.query;
@@ -16,12 +11,29 @@ export default async (ctx: Context) => {
       role: "*",
     },
   });
-  const permissions = await getService("permission")
-    .findRolePermissions(wallet.role.id)
-    .then(map(getService("permission").toContentAPIPermission));
+
+  if (!wallet) {
+    ctx.throw("User not found!", 403);
+    return;
+  }
+
+  if (!wallet.role) {
+    ctx.throw("Role not found!", 403);
+    return;
+  }
+
+  const permissions = await strapi.db
+    .query("api::wallet.wallet-permission")
+    .findMany({
+      where: {
+        role: wallet.role.id,
+      },
+    });
 
   return {
     user: wallet,
-    permissions,
+    permissions: permissions.map((permission) => ({
+      action: permission.action,
+    })),
   };
 };

@@ -5,7 +5,7 @@ const getService = (name) => {
 };
 
 export default async (ctx) => {
-  return await getService("permission")
-    .findPublicPermissions()
-    .then(map(getService("permission").toContentAPIPermission));
+  return await strapi.entityService.findMany("api::wallet.wallet-permission", {
+    filters: { role: { type: "public" } },
+  });
 };

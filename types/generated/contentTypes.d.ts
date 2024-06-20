@@ -407,6 +407,11 @@ export interface ApiWalletWallet extends Schema.CollectionType {
   };
   attributes: {
     address: Attribute.String & Attribute.Required & Attribute.Unique;
+    role: Attribute.Relation<
+      'api::wallet.wallet',
+      'manyToOne',
+      'plugin::users-permissions.role'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -750,14 +755,6 @@ export interface PluginUsersPermissionsRole extends Schema.CollectionType {
     pluralName: 'roles';
     displayName: 'Role';
   };
-  pluginOptions: {
-    'content-manager': {
-      visible: false;
-    };
-    'content-type-builder': {
-      visible: false;
-    };
-  };
   attributes: {
     name: Attribute.String &
       Attribute.Required &
@@ -772,6 +769,11 @@ export interface PluginUsersPermissionsRole extends Schema.CollectionType {
       'plugin::users-permissions.permission'
     >;
     users: Attribute.Relation<
+      'plugin::users-permissions.role',
+      'oneToMany',
+      'plugin::users-permissions.user'
+    >;
+    wallet: Attribute.Relation<
       'plugin::users-permissions.role',
       'oneToMany',
       'plugin::users-permissions.user'
@@ -804,7 +806,6 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   options: {
     draftAndPublish: false;
-    timestamps: true;
   };
   attributes: {
     username: Attribute.String &
@@ -833,6 +834,7 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
       'manyToOne',
       'plugin::users-permissions.role'
     >;
+    test: Attribute.String;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<

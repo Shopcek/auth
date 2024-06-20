@@ -19,7 +19,7 @@ export default async (ctx, next) => {
     ctx.throw("Invalid credentials!", 403);
   }
   const jwt = JWT.sign({ address: address }, serviceData.secretKey, {
-    expiresIn: 5 * 60,
+    expiresIn: 360,
   });
   ctx.body = {
     jwt,

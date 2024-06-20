@@ -35,6 +35,16 @@ export default (config, { strapi }: { strapi: Strapi }) => {
       ctx.body = value;
     }
 
+    if (validator.query) {
+      const { error, value } = validate(ctx.request.query, validator.query);
+
+      if (error) {
+        ctx.throw(error.message, 400);
+      }
+
+      ctx.request.query = value;
+    }
+
     await next();
   };
 };

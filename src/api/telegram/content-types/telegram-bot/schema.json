@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "telegram_bots",
+  "info": {
+    "singularName": "telegram-bot",
+    "pluralName": "telegram-bots",
+    "displayName": "Telegram Bot"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "token": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "username": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

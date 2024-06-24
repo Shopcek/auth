@@ -362,6 +362,46 @@ export interface AdminTransferTokenPermission extends Schema.CollectionType {
   };
 }
 
+export interface ApiServiceAction extends Schema.CollectionType {
+  collectionName: 'actions';
+  info: {
+    singularName: 'action';
+    pluralName: 'actions';
+    displayName: 'Action';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    action: Attribute.String;
+    role: Attribute.Relation<
+      'api::service.action',
+      'manyToOne',
+      'plugin::users-permissions.role'
+    >;
+    service: Attribute.Relation<
+      'api::service.action',
+      'manyToOne',
+      'api::service.service'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::service.action',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::service.action',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
 export interface ApiServiceService extends Schema.CollectionType {
   collectionName: 'services';
   info: {
@@ -381,7 +421,12 @@ export interface ApiServiceService extends Schema.CollectionType {
     permissions: Attribute.Relation<
       'api::service.service',
       'oneToMany',
-      'api::wallet.wallet-permission'
+      'api::service.action'
+    >;
+    actions: Attribute.Relation<
+      'api::service.service',
+      'oneToMany',
+      'api::service.action'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -393,6 +438,74 @@ export interface ApiServiceService extends Schema.CollectionType {
       Attribute.Private;
     updatedBy: Attribute.Relation<
       'api::service.service',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTelegramTelegramBot extends Schema.CollectionType {
+  collectionName: 'telegram_bots';
+  info: {
+    singularName: 'telegram-bot';
+    pluralName: 'telegram-bots';
+    displayName: 'Telegram Bot';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    token: Attribute.String & Attribute.Required & Attribute.Unique;
+    username: Attribute.String & Attribute.Required & Attribute.Unique;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::telegram.telegram-bot',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::telegram.telegram-bot',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+  };
+}
+
+export interface ApiTelegramTelegramUser extends Schema.CollectionType {
+  collectionName: 'telegram_users';
+  info: {
+    singularName: 'telegram-user';
+    pluralName: 'telegram-users';
+    displayName: 'Telegram User';
+    description: '';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    username: Attribute.String & Attribute.Required & Attribute.Unique;
+    telegram_id: Attribute.Integer & Attribute.Required & Attribute.Unique;
+    first_name: Attribute.String;
+    last_name: Attribute.String;
+    user: Attribute.Relation<
+      'api::telegram.telegram-user',
+      'oneToOne',
+      'plugin::users-permissions.user'
+    >;
+    createdAt: Attribute.DateTime;
+    updatedAt: Attribute.DateTime;
+    createdBy: Attribute.Relation<
+      'api::telegram.telegram-user',
+      'oneToOne',
+      'admin::user'
+    > &
+      Attribute.Private;
+    updatedBy: Attribute.Relation<
+      'api::telegram.telegram-user',
       'oneToOne',
       'admin::user'
     > &
@@ -406,67 +519,28 @@ export interface ApiWalletWallet extends Schema.CollectionType {
     singularName: 'wallet';
     pluralName: 'wallets';
     displayName: 'Wallet';
-  };
-  options: {
-    draftAndPublish: false;
-  };
-  attributes: {
-    address: Attribute.String & Attribute.Required & Attribute.Unique;
-    role: Attribute.Relation<
-      'api::wallet.wallet',
-      'manyToOne',
-      'plugin::users-permissions.role'
-    >;
-    createdAt: Attribute.DateTime;
-    updatedAt: Attribute.DateTime;
-    createdBy: Attribute.Relation<
-      'api::wallet.wallet',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-    updatedBy: Attribute.Relation<
-      'api::wallet.wallet',
-      'oneToOne',
-      'admin::user'
-    > &
-      Attribute.Private;
-  };
-}
-
-export interface ApiWalletWalletPermission extends Schema.CollectionType {
-  collectionName: 'wallet_permissions';
-  info: {
-    singularName: 'wallet-permission';
-    pluralName: 'wallet-permissions';
-    displayName: 'Wallet Permission';
     description: '';
   };
   options: {
     draftAndPublish: false;
   };
   attributes: {
-    action: Attribute.String & Attribute.Required;
-    role: Attribute.Relation<
-      'api::wallet.wallet-permission',
+    address: Attribute.String & Attribute.Required & Attribute.Unique;
+    user: Attribute.Relation<
+      'api::wallet.wallet',
       'oneToOne',
-      'plugin::users-permissions.role'
-    >;
-    service: Attribute.Relation<
-      'api::wallet.wallet-permission',
-      'manyToOne',
-      'api::service.service'
+      'plugin::users-permissions.user'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
-      'api::wallet.wallet-permission',
+      'api::wallet.wallet',
       'oneToOne',
       'admin::user'
     > &
       Attribute.Private;
     updatedBy: Attribute.Relation<
-      'api::wallet.wallet-permission',
+      'api::wallet.wallet',
       'oneToOne',
       'admin::user'
     > &
@@ -818,10 +892,10 @@ export interface PluginUsersPermissionsRole extends Schema.CollectionType {
       'oneToMany',
       'plugin::users-permissions.user'
     >;
-    wallet: Attribute.Relation<
+    actions: Attribute.Relation<
       'plugin::users-permissions.role',
       'oneToMany',
-      'plugin::users-permissions.user'
+      'api::service.action'
     >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
@@ -854,40 +928,28 @@ export interface PluginUsersPermissionsUser extends Schema.CollectionType {
   };
   pluginOptions: {
     'content-manager': {
-      visible: false;
+      visible: true;
     };
     'content-type-builder': {
-      visible: false;
+      visible: true;
     };
   };
   attributes: {
-    username: Attribute.String &
-      Attribute.Required &
-      Attribute.Unique &
-      Attribute.SetMinMaxLength<{
-        minLength: 3;
-      }>;
-    email: Attribute.Email &
-      Attribute.Required &
-      Attribute.SetMinMaxLength<{
-        minLength: 6;
-      }>;
-    provider: Attribute.String;
-    password: Attribute.Password &
-      Attribute.Private &
-      Attribute.SetMinMaxLength<{
-        minLength: 6;
-      }>;
-    resetPasswordToken: Attribute.String & Attribute.Private;
-    confirmationToken: Attribute.String & Attribute.Private;
-    confirmed: Attribute.Boolean & Attribute.DefaultTo<false>;
-    blocked: Attribute.Boolean & Attribute.DefaultTo<false>;
     role: Attribute.Relation<
       'plugin::users-permissions.user',
       'manyToOne',
       'plugin::users-permissions.role'
     >;
-    test: Attribute.String;
+    telegram_user: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::telegram.telegram-user'
+    >;
+    wallet: Attribute.Relation<
+      'plugin::users-permissions.user',
+      'oneToOne',
+      'api::wallet.wallet'
+    >;
     createdAt: Attribute.DateTime;
     updatedAt: Attribute.DateTime;
     createdBy: Attribute.Relation<
@@ -915,9 +977,11 @@ declare module '@strapi/types' {
       'admin::api-token-permission': AdminApiTokenPermission;
       'admin::transfer-token': AdminTransferToken;
       'admin::transfer-token-permission': AdminTransferTokenPermission;
+      'api::service.action': ApiServiceAction;
       'api::service.service': ApiServiceService;
+      'api::telegram.telegram-bot': ApiTelegramTelegramBot;
+      'api::telegram.telegram-user': ApiTelegramTelegramUser;
       'api::wallet.wallet': ApiWalletWallet;
-      'api::wallet.wallet-permission': ApiWalletWalletPermission;
       'plugin::upload.file': PluginUploadFile;
       'plugin::upload.folder': PluginUploadFolder;
       'plugin::content-releases.release': PluginContentReleasesRelease;

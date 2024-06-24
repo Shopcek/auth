@@ -1,0 +1,40 @@
+{
+  "kind": "collectionType",
+  "collectionName": "telegram_users",
+  "info": {
+    "singularName": "telegram-user",
+    "pluralName": "telegram-users",
+    "displayName": "Telegram User",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "username": {
+      "type": "string",
+      "unique": true,
+      "required": true
+    },
+    "telegram_id": {
+      "type": "integer",
+      "unique": true,
+      "required": true
+    },
+    "first_name": {
+      "type": "string",
+      "required": false,
+      "unique": false
+    },
+    "last_name": {
+      "type": "string"
+    },
+    "user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "plugin::users-permissions.user",
+      "mappedBy": "telegram_user"
+    }
+  }
+}

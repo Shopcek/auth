@@ -1,42 +1,39 @@
-import { Context } from "koa";
+export default async (ctx) => {
+  const { id, service } = ctx.request.query;
 
-export default async (ctx: Context) => {
-  const { address, service } = ctx.request.query;
-
-  const wallet = await strapi.db.query("api::wallet.wallet").findOne({
+  const user = await strapi.db.query("plugin::users-permissions.user").findOne({
     where: {
-      address,
+      id,
     },
     populate: {
       role: "*",
+      wallet: "*",
+      telegram_user: "*",
     },
   });
 
-  if (!wallet) {
+  if (!user) {
     ctx.throw("User not found!", 403);
-    return;
   }
 
-  if (!wallet.role) {
+  if (!user.role) {
     ctx.throw("Role not found!", 403);
-    return;
   }
 
   const permissions = await strapi.entityService.findMany(
-    "api::wallet.wallet-permission",
+    "api::service.action",
     {
       filters: {
-        role: wallet.role.id,
+        role: user.role.id,
         service: {
           key: service,
-        },
+        } as any,
       },
     }
   );
-  console.log(permissions);
 
   return {
-    user: wallet,
+    user,
     permissions: permissions.map((permission) => ({
       action: permission.action,
     })),

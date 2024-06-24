@@ -1,4 +1,5 @@
 {
+  "kind": "collectionType",
   "collectionName": "up_roles",
   "info": {
     "name": "role",
@@ -38,13 +39,11 @@
       "mappedBy": "role",
       "configurable": false
     },
-
-    "wallet": {
+    "actions": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "plugin::users-permissions.user",
-      "mappedBy": "role",
-      "configurable": false
+      "target": "api::service.action",
+      "mappedBy": "role"
     }
   }
 }

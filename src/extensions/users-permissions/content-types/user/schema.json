@@ -8,64 +8,18 @@
     "pluralName": "users",
     "displayName": "User"
   },
-  "pluginOptions": {
-    "content-manager": {
-      "visible": false
-    },
-    "content-type-builder": {
-      "visible": false
-    }
-  },
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": true
+    },
+    "content-type-builder": {
+      "visible": true
+    }
+  },
   "attributes": {
-    "username": {
-      "type": "string",
-      "minLength": 3,
-      "unique": true,
-      "configurable": false,
-      "required": true
-    },
-    "email": {
-      "type": "email",
-      "minLength": 6,
-      "configurable": false,
-      "required": true
-    },
-    "provider": {
-      "type": "string",
-      "configurable": false
-    },
-    "password": {
-      "type": "password",
-      "minLength": 6,
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
-    "resetPasswordToken": {
-      "type": "string",
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
-    "confirmationToken": {
-      "type": "string",
-      "configurable": false,
-      "private": true,
-      "searchable": false
-    },
-    "confirmed": {
-      "type": "boolean",
-      "default": false,
-      "configurable": false
-    },
-    "blocked": {
-      "type": "boolean",
-      "default": false,
-      "configurable": false
-    },
     "role": {
       "type": "relation",
       "relation": "manyToOne",
@@ -73,8 +27,17 @@
       "inversedBy": "users",
       "configurable": false
     },
-    "test": {
-      "type": "string"
+    "telegram_user": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::telegram.telegram-user",
+      "inversedBy": "user"
+    },
+    "wallet": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::wallet.wallet",
+      "inversedBy": "user"
     }
   }
 }

@@ -25,7 +25,13 @@
     "permissions": {
       "type": "relation",
       "relation": "oneToMany",
-      "target": "api::wallet.wallet-permission",
+      "target": "api::service.action",
+      "mappedBy": "service"
+    },
+    "actions": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::service.action",
       "mappedBy": "service"
     }
   }

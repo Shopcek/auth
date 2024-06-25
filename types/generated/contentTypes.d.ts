@@ -418,11 +418,6 @@ export interface ApiServiceService extends Schema.CollectionType {
     secretKey: Attribute.String &
       Attribute.Required &
       Attribute.DefaultTo<'high-secure-secret-key'>;
-    permissions: Attribute.Relation<
-      'api::service.service',
-      'oneToMany',
-      'api::service.action'
-    >;
     actions: Attribute.Relation<
       'api::service.service',
       'oneToMany',

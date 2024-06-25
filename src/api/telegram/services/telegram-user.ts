@@ -58,7 +58,13 @@ export default () => ({
     if (validationKey !== authTelegramData.hash) {
       throw new Error("Validation failure. Bot token or initData not correct.");
     }
+    const user = authTelegramData.metaData.user;
 
-    return authTelegramData.metaData.user;
+    return {
+      telegram_id: user.id,
+      username: user.username,
+      last_name: user.last_name,
+      first_name: user.first_name,
+    };
   },
 });

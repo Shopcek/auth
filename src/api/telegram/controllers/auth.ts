@@ -18,8 +18,6 @@ export default {
         .service("api::telegram.telegram-user")
         .auth(initData, botUsername);
 
-      telegramUser.telegram_id = telegramUser.id;
-      delete telegramUser.id;
       let localTelegramUser = await strapi.db
         .query("api::telegram.telegram-user")
         .findOne({
@@ -36,6 +34,17 @@ export default {
           .query("api::telegram.telegram-user")
           .create({
             data: telegramUser,
+            populate: {
+              user: "*",
+            },
+          });
+
+        localTelegramUser = await strapi.db
+          .query("api::telegram.telegram-user")
+          .findOne({
+            where: {
+              username: telegramUser.username,
+            },
             populate: {
               user: "*",
             },

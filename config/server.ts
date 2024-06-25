@@ -1,7 +1,7 @@
 export default ({ env }) => ({
   host: env("HOST", "0.0.0.0"),
   port: env.int("PORT", 1337),
-  url: "https://api.shopcek.com/auth",
+  url: env("NODE_ENV") === "production" ? env("URL") : "",
   app: {
     keys: env.array("APP_KEYS"),
   },

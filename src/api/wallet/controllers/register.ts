@@ -24,7 +24,6 @@ export default {
       await strapi.entityService.create("api::wallet.wallet", {
         data: {
           address,
-          role: 1,
         },
       });
     } catch (error: any) {
@@ -36,7 +35,16 @@ export default {
       );
     }
 
-    const jwt = JWT.sign({ address: address }, serviceData.secretKey, {
+    const wallet = await strapi.db.query("api::wallet.wallet").findOne({
+      where: {
+        address,
+      },
+      populate: {
+        user: "*",
+      },
+    });
+
+    const jwt = JWT.sign({ id: wallet.user.id }, serviceData.secretKey, {
       expiresIn: 5 * 60,
     });
     ctx.body = {

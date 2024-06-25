@@ -26,6 +26,9 @@ export default {
       where: {
         address,
       },
+      populate: {
+        user: "*",
+      },
     });
 
     if (!wallet) {
@@ -34,7 +37,7 @@ export default {
     }
 
     ctx.body = {
-      jwt: JWT.sign({ id: wallet.user }, serviceData.secretKey, {
+      jwt: JWT.sign({ id: wallet.user.id }, serviceData.secretKey, {
         expiresIn: 360,
       }),
     };

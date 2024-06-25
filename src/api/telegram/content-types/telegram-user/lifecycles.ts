@@ -14,6 +14,7 @@ export default {
     await strapi.db.query("plugin::users-permissions.user").create({
       data: {
         telegram_user: event.result.id,
+        role: [1],
       },
     });
   },
